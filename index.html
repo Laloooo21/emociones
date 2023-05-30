@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analizador de emociones</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header>
+      <!-- Barra de navegación -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Tus emociones al instante...</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#features">Características</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contacto</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Sección de cabecera -->
+      <section class="jumbotron text-center text-white">
+        <h1 class="display-4">¡Bienvenido al detector de emociones!</h1>
+        <p class="lead">
+          Nuestra página identifica emociones en base a imagenes, audio y posturas ingresadas por el usuario.
+
+        </p>
+        <a href="#contact" class="btn btn-dark">Contactar</a>
+      </section>
+
+      <!-- Sección de características -->
+      <section id="features" class="py-5">
+        <div class="container">
+          <h2 class="text-center mb-5">Características</h2>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card mb-4">
+                <a class="botones" href="#imagenes">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Imagenes</h5>
+                    <p class="card-text">En este modelo preparado con imágenes, se analizará tu rosto para saber que emociones presentas. 
+                    Entre las que esta felicidad, tristeza, asco, asombro y enojo.  
+                    Este modelo tomara tu rosto y los comparar con las imágenes que fue entrenado para saber que emoción presentas. 
+                    Ahora pon tu mejor cara y diviértete..</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card mb-4">
+                <a class="botones" href="#audio">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Audio</h5>
+                    <p class="card-text">A continuación, el modelo detectara aquellos sonidos que se relacionan con las emociones de felicidad, tristeza, asco, asombro y enojo. </p>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card mb-4">
+                <a class="botones" href="#posturas">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">Posturas</h5>
+                    <p class="card-text">Las posturas, el modelo de posturas buscara relacionar las emociones de felicidad, tristeza, asco, enojo y asombro. 
+                      Cada emoción tiene una expresión corporal que la ayuda a identificar del resto.
+                      Ahora has tu mejor postura e identifica a que emoción corresponde.</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección de precios -->
+<section id="imagenes" class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">Imagenes</h2>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-12">
+          <div class="card-body text-center">
+            <h2>
+              <div>Da clic en start para comenza con las Imagenes!</div>
+              <button type="button" onclick="initImageModel()">Start</button>
+              <div id="webcam-container"></div>
+              <div id="image-label-container"></div>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="audio" class="bg-white py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">Audio</h2>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-12">
+          <div class="card-body text-center">
+            <h2>
+              <div>Da clic en start para comenzar con el Audio!</div>
+              <button type="button" onclick="initAudioModel()">Start</button>
+              <div id="audio-label-container"></div>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="posturas" class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">Posturas</h2>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mb-12">
+          <div class="card-body text-center">
+            <h2>
+              <div>Da clic en start para comenzar con las posturas!</div>
+              <button type="button" onclick="initPoseModel()">Start</button>
+              <div><canvas id="canvas"></canvas></div>
+              <div id="pose-label-container"></div>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/speech-commands@0.4.0/dist/speech-commands.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+
+
+<script type="text/javascript">
+  // Teachable Machine Image Model
+  const imageModelURL = "https://teachablemachine.withgoogle.com/models/yiQscNlfH/";
+  let imageModel, imageWebcam, imageLabelContainer, imageMaxPredictions;
+
+  async function initImageModel() {
+    const modelURL = imageModelURL + "model.json";
+    const metadataURL = imageModelURL + "metadata.json";
+
+    imageModel = await tmImage.load(modelURL, metadataURL);
+    imageMaxPredictions = imageModel.getTotalClasses();
+
+    const flip = true;
+    imageWebcam = new tmImage.Webcam(200, 200, flip);
+    await imageWebcam.setup();
+    await imageWebcam.play();
+    window.requestAnimationFrame(imageLoop);
+
+    document.getElementById("webcam-container").appendChild(imageWebcam.canvas);
+    imageLabelContainer = document.getElementById("image-label-container");
+    for (let i = 0; i < imageMaxPredictions; i++) {
+      imageLabelContainer.appendChild(document.createElement("div"));
+    }
+  }
+
+  async function imageLoop() {
+    imageWebcam.update();
+    await imagePredict();
+    window.requestAnimationFrame(imageLoop);
+  }
+
+  async function imagePredict() {
+    const prediction = await imageModel.predict(imageWebcam.canvas);
+    for (let i = 0; i < imageMaxPredictions; i++) {
+      const classPrediction =
+        prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+      imageLabelContainer.childNodes[i].innerHTML = classPrediction;
+    }
+  }
+
+  // Teachable Machine Audio Model
+  const audioModelURL = "https://teachablemachine.withgoogle.com/models/DryI2SLky/";
+
+  async function createAudioModel() {
+    const checkpointURL = audioModelURL + "model.json";
+    const metadataURL = audioModelURL + "metadata.json";
+
+    const recognizer = speechCommands.create(
+      "BROWSER_FFT",
+      undefined,
+      checkpointURL,
+      metadataURL,
+      {sampleRateHz: 44100}
+    );
+
+    await recognizer.ensureModelLoaded();
+
+    return recognizer;
+  }
+
+  async function initAudioModel() {
+    const recognizer = await createAudioModel();
+    const classLabels = recognizer.wordLabels();
+    const audioLabelContainer = document.getElementById("audio-label-container");
+    for (let i = 0; i < classLabels.length; i++) {
+      audioLabelContainer.appendChild(document.createElement("div"));
+    }
+
+    recognizer.listen(
+      (result) => {
+        const scores = result.scores;
+        for (let i = 0; i < classLabels.length; i++) {
+          const classPrediction = classLabels[i] + ": " + result.scores[i].toFixed(2);
+          audioLabelContainer.childNodes[i].innerHTML = classPrediction;
+        }
+      },
+      {
+        sampleRateHz: 44100,
+        includeSpectrogram: true,
+        probabilityThreshold: 0.75,
+        invokeCallbackOnNoiseAndUnknown: true,
+        overlapFactor: 0.5,
+      }
+    );
+  }
+
+  // Teachable Machine Pose Model
+  const poseModelURL = "https://teachablemachine.withgoogle.com/models/AIcTFJ43b/";
+  let poseModel, poseWebcam, poseCtx, poseLabelContainer, poseMaxPredictions;
+
+  async function initPoseModel() {
+    const modelURL = poseModelURL + "model.json";
+    const metadataURL = poseModelURL + "metadata.json";
+
+    poseModel = await tmPose.load(modelURL, metadataURL);
+    poseMaxPredictions = poseModel.getTotalClasses();
+
+    const size = 200;
+    const flip = true;
+    poseWebcam = new tmPose.Webcam(size, size, flip);
+    await poseWebcam.setup();
+    await poseWebcam.play();
+    window.requestAnimationFrame(poseLoop);
+
+    const canvas = document.getElementById("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    poseCtx = canvas.getContext("2d");
+    poseLabelContainer = document.getElementById("pose-label-container");
+    for (let i = 0; i < poseMaxPredictions; i++) {
+      poseLabelContainer.appendChild(document.createElement("div"));
+    }
+  }
+
+  async function poseLoop(timestamp) {
+    poseWebcam.update();
+    await posePredict();
+    window.requestAnimationFrame(poseLoop);
+  }
+
+  async function posePredict() {
+    const { pose, posenetOutput } = await poseModel.estimatePose(poseWebcam.canvas);
+    const prediction = await poseModel.predict(posenetOutput);
+
+    for (let i = 0; i < poseMaxPredictions; i++) {
+      const classPrediction =
+        prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+      poseLabelContainer.childNodes[i].innerHTML = classPrediction;
+    }
+
+    drawPose(pose);
+  }
+
+  function drawPose(pose) {
+    if (poseWebcam.canvas) {
+      poseCtx.drawImage(poseWebcam.canvas, 0, 0);
+      if (pose) {
+        const minPartConfidence = 0.5;
+        tmPose.drawKeypoints(pose.keypoints, minPartConfidence, poseCtx);
+        tmPose.drawSkeleton(pose.keypoints, minPartConfidence, poseCtx);
+      }
+    }
+  }
+
+  // Initialize the models on button click
+  function startModels() {
+    initImageModel();
+    initAudioModel();
+    initPoseModel();
+  }
+</script>
+
+
+                    
+
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección de contacto -->
+      <section id="contact" class="py-5">
+        <div class="container">
+          <h2 class="text-center mb-5">Contacto</h2>
+          <div class="row">
+            <div class="col-md-6">
+              <form>
+                <div class="form-group">
+                  <label for="name">Nombre</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    placeholder="Ingrese su nombre"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="email">Correo electrónico</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="Ingrese su correo electrónico"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="message">Mensaje</label>
+                  <textarea
+                    class="form-control"
+                    id="message"
+                    rows="5"
+                    placeholder="Ingrese su mensaje"
+                  ></textarea>
+                </div>
+                <button type="submit" class="btn btn-dark">Enviar</button>
+              </form>
+            </div>
+            <div class="col-md-6">
+              <h5>Información de contacto</h5>
+              <p>Correo electrónico: info@example.com</p>
+              <p>Teléfono: 3226784740</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-dark">
+      <div class="text-center py-3 text-white">
+        <p>&copy; 2023 Mi pagina web. Todos los derechos reservados.</p>
+        <p>By Paula & Lalo</p>
+      </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
